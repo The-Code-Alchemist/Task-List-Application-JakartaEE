@@ -4,13 +4,17 @@ import com.codealchemists.tasklistapplication.model.Task;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 public class TaskRepository {
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("taskListPU");
 
     public void save(Task task) {
+        log.debug("Saving task: {}", task.getTitle());
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             if (task.getId() == null) {
@@ -19,6 +23,10 @@ public class TaskRepository {
                 em.merge(task);
             }
             em.getTransaction().commit();
+            log.debug("Task saved successfully.");
+        } catch (Exception e) {
+            log.error("Error saving task: {}", task.getTitle(), e);
+            throw e;
         }
     }
 
@@ -32,6 +40,7 @@ public class TaskRepository {
     }
 
     public List<Task> findAllByUser(UUID userId) {
+        log.debug("Finding all tasks for user ID: {}", userId);
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT t FROM Task t WHERE t.user.id = :userId", Task.class)
                     .setParameter("userId", userId)
@@ -46,8 +55,17 @@ public class TaskRepository {
             Task task = em.find(Task.class, id);
             if (task != null) {
                 em.remove(task);
+                log.debug("Task {} removed from database", id);
+            } else {
+                log.warn("Attempted to delete non-existent task: {}", id);
             }
             em.getTransaction().commit();
+        } catch (Exception e) {
+            log.error("Error deleting task: {}", id, e);
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
         } finally {
             em.close();
         }
