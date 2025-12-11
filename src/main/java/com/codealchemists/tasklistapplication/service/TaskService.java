@@ -14,7 +14,12 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public TaskService() {
-        this.taskRepository = new TaskRepository();
+        this(new TaskRepository());
+    }
+
+    // Constructor Injection for Testing
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     public List<Task> getTasksForUser(User user) {

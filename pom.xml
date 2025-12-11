@@ -80,6 +80,20 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Mockito for Unit Testing -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Logging: SLF4J API and Logback Implementation -->
         <dependency>
             <groupId>org.slf4j</groupId>
