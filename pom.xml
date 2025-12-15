@@ -58,14 +58,6 @@
             <version>6.4.4.Final</version>
         </dependency>
 
-        <!-- Lombok (Reduces boilerplate code) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- JUnit for Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -167,7 +159,6 @@
                         <configuration>
                             <!-- In this profile, run ONLY E2E tests -->
                             <groups>e2e</groups>
-                            <excludedGroups></excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
