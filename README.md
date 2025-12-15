@@ -64,7 +64,7 @@ Test runner and step definitions live under:
 - **JPA configuration:** `src/main/resources/META-INF/persistence.xml`
 - **Docker DB config:** `docker-compose.yaml`
 
-## Future Improvements
+## Future Improvements to consider
 - Add CI workflow (build and test on pull requests)
 - Document environment variables / profiles (test vs local vs prod)
 - Add API contract documentation (endpoints, request/response, status codes)
