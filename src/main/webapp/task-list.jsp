@@ -41,7 +41,7 @@
 <!-- Task List -->
 <c:forEach items="${tasks}" var="task">
     <div class="task-card">
-        <h3>${task.title} <span class="status-badge">${task.status}</span></h3>
+        <h3>${task.title} <span class="status-badge">${task.status.displayText}</span></h3>
         <p><strong>Summary:</strong> ${task.shortDescription}</p>
         <p>${task.longDescription}</p>
 
@@ -52,7 +52,7 @@
                 <input type="hidden" name="taskId" value="${task.id}">
                 <select name="status" onchange="this.form.submit()">
                     <c:forEach items="<%= TaskStatus.values() %>" var="status">
-                        <option value="${status}" ${task.status == status ? 'selected' : ''}>${status}</option>
+                        <option value="${status}" ${task.status == status ? 'selected' : ''}>${status.displayText}</option>
                     </c:forEach>
                 </select>
             </form>
@@ -67,5 +67,6 @@
     </div>
 </c:forEach>
 
+<p><a href="users">Go to Users</a></p>
 </body>
 </html>
