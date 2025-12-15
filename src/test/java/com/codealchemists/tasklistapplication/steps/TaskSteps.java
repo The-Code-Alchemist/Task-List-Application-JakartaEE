@@ -10,16 +10,18 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 public class TaskSteps {
 
@@ -30,6 +32,7 @@ public class TaskSteps {
 
     private User currentUser;
     private final List<Task> mockDatabase = new ArrayList<>();
+    private final Map<String, User> usersByUsername = new HashMap<>();
 
     @Before
     public void setUp() {
@@ -40,6 +43,8 @@ public class TaskSteps {
         when(taskRepository.findAllByUser(any(UUID.class))).thenAnswer(invocation -> {
             UUID userId = invocation.getArgument(0);
             return mockDatabase.stream()
+                    .filter(t -> t.getUser() != null)
+                    .filter(t -> t.getUser().getId() != null)
                     .filter(t -> t.getUser().getId().equals(userId))
                     .toList();
         });
@@ -57,9 +62,12 @@ public class TaskSteps {
 
     @Given("a user named {string} exists")
     public void a_user_named_exists(String username) {
-        currentUser = new User();
-        currentUser.setId(UUID.randomUUID());
-        currentUser.setUsername(username);
+        User user = new User();
+        user.setId(UUID.randomUUID());
+        user.setUsername(username);
+
+        usersByUsername.put(username, user);
+        currentUser = user;
     }
 
     @When("the user creates a task with title {string}")
@@ -69,13 +77,14 @@ public class TaskSteps {
 
     @Then("the task list for {string} should contain {string}")
     public void the_task_list_for_should_contain(String username, String expectedTitle) {
-        // In a real integration test, we might fetch from DB.
-        // Here we rely on the service fetching from our mocked repository.
-        List<Task> tasks = taskService.getTasksForUser(currentUser);
+        User user = usersByUsername.get(username);
+        assertNotNull(user, "No test user found for username: " + username);
+
+        List<Task> tasks = taskService.getTasksForUser(user);
 
         boolean found = tasks.stream()
-                .anyMatch(t -> t.getTitle().equals(expectedTitle));
+                .anyMatch(t -> expectedTitle.equals(t.getTitle()));
 
-        assertTrue(found, "Task with title " + expectedTitle + " not found!");
+        assertTrue(found, "Task with title " + expectedTitle + " not found for user " + username + "!");
     }
 }

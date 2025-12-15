@@ -7,6 +7,7 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.options.WaitUntilState;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
@@ -27,8 +28,9 @@ public class TaskListE2ETest {
     @BeforeAll
     static void launchBrowser() {
         playwright = Playwright.create();
-        // Set headless=false if you want to see the browser UI
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+
+        boolean headless = Boolean.parseBoolean(System.getenv().getOrDefault("E2E_HEADLESS", "true"));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
     }
 
     @AfterAll
@@ -49,21 +51,16 @@ public class TaskListE2ETest {
 
     @Test
     void shouldDisplayTaskListPage() {
-        // Adjust URL to match your local running server
-        // If the app is not running, this test will fail
+        // If the app is not running, this test will fail; we treat that as a skip-like behavior.
         try {
-            page.navigate("http://localhost:8080/tasks");
+            page.navigate(
+                    "http://localhost:8080/tasks",
+                    new Page.NavigateOptions().setWaitUntil(WaitUntilState.NETWORKIDLE)
+            );
 
-            // Check if the title is correct
-            String title = page.title();
-            // Assuming your JSP has a title, or we check for specific text
-            // assertTrue(title.contains("Task List"));
-
-            // Or check for a specific element existence
-            Locator heading = page.locator("h1"); // Assuming there is an <h1>
-            // assertTrue(heading.isVisible());
-
-            page.waitForTimeout(20000); // keep browser open for 20 seconds (20000 ms)
+            Locator heading = page.locator("h1");
+            assertTrue(heading.isVisible());
+            assertTrue(heading.innerText().contains("Task List"));
 
         } catch (PlaywrightException e) {
             System.err.println("Skipping E2E test because server might not be running: " + e.getMessage());

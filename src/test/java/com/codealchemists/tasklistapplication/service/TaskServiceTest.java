@@ -14,8 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.any;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
@@ -82,11 +86,47 @@ class TaskServiceTest {
     }
 
     @Test
+    void shouldNotUpdateTaskStatusWhenTaskDoesNotExist() {
+        UUID taskId = UUID.randomUUID();
+        when(taskRepository.findById(taskId)).thenReturn(null);
+
+        assertDoesNotThrow(() -> taskService.updateTaskStatus(taskId.toString(), "DONE"));
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
+    void shouldNotUpdateTaskStatusOnInvalidStatus() {
+        UUID taskId = UUID.randomUUID();
+        Task existingTask = new Task();
+        existingTask.setId(taskId);
+        existingTask.setStatus(TaskStatus.TO_DO);
+
+        when(taskRepository.findById(taskId)).thenReturn(existingTask);
+
+        assertDoesNotThrow(() -> taskService.updateTaskStatus(taskId.toString(), "NOT_A_REAL_STATUS"));
+        assertEquals(TaskStatus.TO_DO, existingTask.getStatus());
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
+    void shouldNotUpdateTaskStatusOnInvalidUuid() {
+        assertDoesNotThrow(() -> taskService.updateTaskStatus("not-a-uuid", "DONE"));
+        verify(taskRepository, never()).findById(any(UUID.class));
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
     void shouldDeleteTask() {
         UUID taskId = UUID.randomUUID();
 
         taskService.deleteTask(taskId.toString());
 
         verify(taskRepository).delete(taskId);
+    }
+
+    @Test
+    void shouldNotDeleteTaskOnInvalidUuid() {
+        assertDoesNotThrow(() -> taskService.deleteTask("not-a-uuid"));
+        verify(taskRepository, never()).delete(any(UUID.class));
     }
 }
