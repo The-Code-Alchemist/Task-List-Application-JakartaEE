@@ -13,7 +13,7 @@ A **Jakarta EE** web application built with **Java 21**, **Maven**, and **Docker
 ## Prerequisites
 1. **Java 21**
 2. **Docker Desktop** (running)
-3. **Tomcat 10.1+** (or equivalent Jakarta EE 11 server)
+3. **Tomcat 11** (or equivalent Jakarta EE 11 server)
 4. (Optional) **IntelliJ IDEA** for easiest local run/debug setup
 
 ## Tech Stack

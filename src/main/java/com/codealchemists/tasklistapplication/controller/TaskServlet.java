@@ -9,13 +9,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-@Slf4j
 @WebServlet(name = "TaskServlet", urlPatterns = {"/tasks"})
 public class TaskServlet extends HttpServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(TaskServlet.class);
 
     private final TaskService taskService = new TaskService();
     private final UserRepository userRepository = new UserRepository();

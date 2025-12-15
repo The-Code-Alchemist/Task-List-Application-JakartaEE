@@ -4,13 +4,15 @@ import com.codealchemists.tasklistapplication.model.Task;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 public class TaskRepository {
+    private static final Logger log = LoggerFactory.getLogger(TaskRepository.class);
+
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("taskListPU");
 
     public void save(Task task) {

@@ -4,13 +4,15 @@ import com.codealchemists.tasklistapplication.model.Task;
 import com.codealchemists.tasklistapplication.model.TaskStatus;
 import com.codealchemists.tasklistapplication.model.User;
 import com.codealchemists.tasklistapplication.repository.TaskRepository;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 public class TaskService {
+    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
+
     private final TaskRepository taskRepository;
 
     public TaskService() {
