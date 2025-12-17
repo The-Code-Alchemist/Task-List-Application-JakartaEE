@@ -5,20 +5,18 @@
 <html>
 <head>
     <title>My Task List</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .task-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
-        .form-group { margin-bottom: 10px; }
-        label { display: block; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 5px; }
-    </style>
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 
 <h1>Task List</h1>
 
+<div class="nav">
+    <a href="users">Users</a>
+</div>
+
 <!-- Create Task Form -->
-<div style="background: #f9f9f9; padding: 15px; margin-bottom: 20px;">
+<div class="panel">
     <h3>Add New Task</h3>
     <form action="tasks" method="post">
         <input type="hidden" name="action" value="create">
@@ -40,7 +38,7 @@
 
 <!-- Task List -->
 <c:forEach items="${tasks}" var="task">
-    <div class="task-card">
+    <div class="card">
         <h3>${task.title} <span class="status-badge">${task.status.displayText}</span></h3>
         <p><strong>Summary:</strong> ${task.shortDescription}</p>
         <p>${task.longDescription}</p>
@@ -61,12 +59,11 @@
             <form action="tasks" method="post" style="display:inline; float:right;">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="taskId" value="${task.id}">
-                <button type="submit" onclick="return confirm('Delete this task?')" style="background: #ffcccc; border: 1px solid red;">Delete</button>
+                <button type="submit" onclick="return confirm('Delete this task?')" class="btn-danger">Delete</button>
             </form>
         </div>
     </div>
 </c:forEach>
 
-<p><a href="users">Go to Users</a></p>
 </body>
 </html>

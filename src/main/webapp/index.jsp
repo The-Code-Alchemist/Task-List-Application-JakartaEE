@@ -2,12 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>JSP - Hello Jakarta EE!</title>
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 <h1><%= "Hello Task List Application!" %>
 </h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
+<div class="nav">
+    <a href="tasks">Task List</a>
+    <a href="users">Users</a>
+</div>
 </body>
 </html>

@@ -1,0 +1,49 @@
+/* src/main/webapp/assets/css/app.css */
+
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.panel {
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.nav {
+  margin: 12px 0 18px;
+}
+
+.nav a {
+  margin-right: 12px;
+}
+
+.btn-danger {
+  background: #ffcccc;
+  border: 1px solid red;
+}
